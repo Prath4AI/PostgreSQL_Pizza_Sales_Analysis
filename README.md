@@ -3,9 +3,11 @@ This project involves analyzing pizza sales data using advanced SQL queries. Key
 
 **Basics
 1.	Retrieve the total number of orders placed.**
+
 select count(order_id) from orders
 
 **2.	Calculate the total revenue generated from pizza sales.**
+
 SELECT
     round(SUM(order_details.quantity * pizzas.price),1) AS total_sales
 FROM 
@@ -14,6 +16,7 @@ JOIN
     pizzas ON pizzas.pizza_id = order_details.pizza_iid
 
 **3.	Identify the highest-priced pizza.**
+
 SELECT pt.name, p.Price from pizzas p
 join pizza_type pt
 on pt.pizza_type_id = p.pizza_type_id
@@ -21,6 +24,7 @@ order by price desc
 limit 1;
 
 **4.	Identify the most common pizza size ordered.**
+
 SELECT p.size, count(od.order_details_id) as total_quantity from order_details od
 join pizzas p
 on p.pizza_id = od.pizza_id
@@ -29,6 +33,7 @@ order by total_quantity desc
 limit 1;
 
 **5.	List the top 5 most ordered pizza types along with their quantities.**
+
 select pt.name, sum(od.quantity) as total_quantity from pizza_type pt
 join pizzas p
 on pt.pizza_type_id = p.pizza_type_id
@@ -41,6 +46,7 @@ limit 5;
 **Intermediate:**
 
 **6.	Join the necessary tables to find the total quantity of each pizza category ordered.**
+
 select pt.category, count(od.quantity) as total_quantity from pizza_type pt
 join pizzas p
 on p.pizza_type_id = pt.pizza_type_id
@@ -50,21 +56,25 @@ group by category
 order by total_quantity desc;
 
 **7.	Determine the distribution of orders by hour of the day.**
+
 SELECT count(order_id), EXTRACT(HOUR FROM time) AS hour FROM orders
 group by hour
 order by hour;
 
 **8.	Join relevant tables to find the category-wise distribution of pizzas.**
+
 select category, count(name) from pizza_type
 group by category;
 
 **9.	Group the orders by date and calculate the average number of pizzas ordered per day.**
+
 select round(avg(Total_Orders_perday),0) from (select o.date, sum(od.quantity) as Total_Orders_perday from orders o
 join order_details od
 on od.order_id = o.order_id
 group by o.date) as order_quantity
 
 **10.	Determine the top 3 most ordered pizza types based on revenue.**
+
 select pt.name, sum(od.quantity * price) as revenue from order_details od
 join pizzas p
 on p.pizza_id = od.pizza_id
